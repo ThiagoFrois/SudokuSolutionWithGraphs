@@ -1,0 +1,86 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[left=2.5cm,top=2.5cm,right=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage[style=alphabetic]{biblatex}
+
+\addbibresource{ED2.bib}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center} 
+			{\large UNIVERSIDADE TECNOLÓGICA FEDERAL DO PARANÁ}\\[0.7cm]
+			{\large THIAGO HENRIQUE FROIS MENON CUNHA}
+			\vspace*{\fill}
+			
+			{\bf \large RESOLUÇÃO DO SUDOKU POR MEIO DE GRAFOS}
+			\vspace*{\fill}
+			
+			{\large Curitiba PR}\\[0.7cm]
+			{\large 2021}
+		\end{center}
+	\end{titlepage}
+	\begin{titlepage}
+		\begin{center} 
+			{\large THIAGO HENRIQUE FROIS MENON CUNHA}
+			\vspace*{\fill}
+			
+			{\bf \large RESOLUÇÃO DO SUDOKU POR MEIO DE GRAFOS}\\[0.7cm]
+			\hspace{.45\textwidth}
+			\begin{minipage}{.5\textwidth}
+				Relatório elaborado na disciplina de Estrutura de Dados II do curso de Sistemas de Informação, ofertada pelo Departamento Acadêmico de Informática, do Campus Curitiba da Universidade Tecnológica Federal do Paraná.
+				
+				Orientador: Prof. Rodrigo Minetto
+			\end{minipage}
+		
+			\vspace*{\fill}
+			
+			{\large Curitiba PR}\\[0.7cm]
+			{\large 2021}
+		\end{center} 
+	\end{titlepage}
+	\par
+	\section*{Resumo}
+	A coloração de grafos é um tópico usado na resolução de de diversos problemas. No relário, um deles é apresentado. Para achar a solução do sudoku $9$\,x\,$9$, usamos grafos e um algorítmo com a técnica de $backtracking$ para colorir o sudoku célula à célula, respeitando suas regras. 
+	
+	\pagebreak
+	
+	\tableofcontents
+	\pagebreak
+	
+	\section{Introdução}
+	\subsection{Grafos}
+	Os grafos são estruturas expressas por $G(V, E)$, onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas, e ainda, $d_{G}(u)$ é o grau de cada vértice $u \in V$, isto é, o número de arestas que incidem nele. Na Teoria dos Grafos existem alguns conceito principais que são necessários relembrar, para mais informação leia Bondy and Murty \cite{bondymurty76}. 
+	
+	Quando temos um grafo onde todos os seus vértices possuem o mesmo grau $k$, chamamos ele de um grafo $k$-regular. Se um grafo é símples, então ele não possui laços, aresta que são formadas pelo mesmo vértice, e dado dois vértices distintos existe apenas uma ligação entre eles. Assim, para um grafo símples ser completo precisamos que todos os pares de vértices distintos em $G$ tenham uma ligação entre sí.
+	
+	Na computação, uma forma de representar os grafos em computadores é por meio de matrizes, mais especificamente, a matriz de adjacência. Elá é uma matríz onde cada elemento é relação entre dois pares de vértices, isto é, o número de ligação entre eles. Logo, nos grafos símples, cada elemento da matriz representa se existe uma ligação entre dois pares de arestas.
+	
+	Na coloração vértices de grafos temos como objetivo colorir um grafo de forma que para qualquer vértice $u$ de $G$ ele não é colorido com  nenhuma das cores de seus vizinhos. Se queremos contruir uma coloração ótima para o grafo então usamos o mínimo de cores na coloração dos vértices.
+	
+	\subsection{Sudoku}
+	O sudoku é um jogo desenvolvido por Howard Garns. Onde, dada uma grade de lado igual a $n$ com cada celula tendo lado igual a $1$, e algumas pista iniciais, células preenchidas com um número de $1$ até o tamanho do seu lado. Queremos preencher todas as células da grade de modo que não repita um número na mesma linha, coluna ou um subgrade, que são as regiões que obtemos ao dividir a grade por $n$.
+	\pagebreak	
+	\section{Modelagem do problema}
+	O sudoku pode ser expresso como um grafo, onde o conjunto de vértice é cada celula vazia e o conjunto de aresta são os pares de células que não podem ter o mesmo número. É evidente que o grafo obtido é $k$-regular e símples, logo ele pode ser colorido com $k$ cores. E ao aplicar a recoloração no grafo, obtemos uma cor para cada célula vazia, correspondendo a solução do sudoku.
+	
+	\section{Algorítmo do problema}
+	O algorítmo de recoloração dos vértices de um grafo se da usando a técnica de $backtracking$. Para isso, primeiramente transformamos a matriz do sudoku em um grafo, representado por uma matriz de adjacência, onde para identificar os vértices adjcentes e atribuir $1$ na matriz de adjacência foram feitas duas funções. Uma onde cada linha e coluna era um subgrafo e esse grafo era completo, já na outra, a subgrades do sudoku foram transformadas em grafos completos.
+	
+	A próxima etapa é colorir a matriz do sudoku utilizando o backtracking. Assim, 
+	foi criado um vetor onde cada índice é representa uma cor, ou seja, um número, e ao percorrer todos os vizinho de um elemento da matriz obtemos as cores disponíveis para colorir ele. Agora, percorremos todos os elementos nulos da matriz, com base nas cores disponíveis a ele, atribuimos a esse elemento a menor cor disponível, e depois é aplicado a função novamente para a nova matriz gerada se for possível, se não é, como a função é recursiva ela vai voltar até o elemento anterior, aumentando a sua cor para a próxima disponível se possível, verifica se satisfaz a condição do sudoku, se não, repete, assim continuando a percorrer novamente os elementos nulos da matriz. Sabendo que ao final de todo $backtracking$ feito com a matriz obtida colorindo a célula, tornamos essa célula núla novamente.
+	
+	Para obter a matriz com a resolução do sudoku, realizamos o algortímo recursivo até que o não exista nenhum elemento nulo na matriz, assim copiamos essa matriz para outra na função main. 
+	
+	\section{Testes}
+	
+	Ao aplicar coloração de grafos no sudoku e o algorítmo de backtracking, estamos tentando achar uma solução por força-bruta, logo conforme cresce o tamanho do sudoku o tempo necessário para a solução também cresce.
+	\pagebreak
+
+	\section{Conclusão}
+	A resolução do sudoku por meio de grafos é uma aplicação evidente da coloração de vértices, onde por meio da matriz do sudoku e adjacência do grafo podemos realizar um coloração usando $backtracking$. Porém, é evidente que, quanto maior a matriz da qual buscamos a solução mais tempo exigimos para encontra-la.
+	\pagebreak
+	
+	\printbibliography
+	
+\end{document}
